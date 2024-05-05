@@ -1,4 +1,4 @@
-# Tone Ssequencer
+# Tone Sequencer
 
 ## Description
 
