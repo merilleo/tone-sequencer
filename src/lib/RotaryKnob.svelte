@@ -10,6 +10,7 @@
     export let max = 10;
     export let step = 1;
     export let label = '';
+    export let unit = '';
 
     // State variables
     let steps = Math.floor((max - min) / step);
@@ -77,7 +78,7 @@
             style="transform: rotate({rotation}deg);"
             on:mousedown={handleMouseDown}
     >
-        <div class="label" style="transform: rotate({-rotation}deg);">{value.toFixed(2)}</div>
+        <div class="label" style="transform: rotate({-rotation}deg);">{value.toFixed(2)} {unit}</div>
     </div>
 </div>
 
@@ -96,13 +97,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        color: #fff;
+        background-color: #2f3237;
         border-radius: 100% 100% 0 100%;
         cursor: pointer;
-    }
-
-    .rotator.active {
-        background-color: #152bab;
-        color: #fff;
     }
 
     .label {

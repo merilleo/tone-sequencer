@@ -64,6 +64,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
