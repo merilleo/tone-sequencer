@@ -9,6 +9,7 @@
     export let min = 0;
     export let max = 10;
     export let step = 1;
+    export let labelMultiplier = 1;
     export let label = '';
     export let unit = '';
 
@@ -66,7 +67,7 @@
 </script>
 
 <div class="container">
-    <p>{label}</p>
+    <p class="title">{label}</p>
     <div
             role="slider"
             aria-valuemin={min}
@@ -78,7 +79,7 @@
             style="transform: rotate({rotation}deg);"
             on:mousedown={handleMouseDown}
     >
-        <div class="label" style="transform: rotate({-rotation}deg);">{value.toFixed(2)} {unit}</div>
+        <div class="label" style="transform: rotate({-rotation}deg);">{(value * labelMultiplier).toFixed(0)} {unit}</div>
     </div>
 </div>
 
@@ -89,16 +90,19 @@
         justify-content: center;
         align-items: center;
     }
+    .title {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
     .rotator {
         position: relative;
-        width: 50px;
-        height: 50px;
-        border: 1px solid black;
+        width: var(--sequencer-knob-size);
+        height: var(--sequencer-knob-size);
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff;
-        background-color: #2f3237;
+        color: #000;
+        background-color: var(--sequencer-color-gray-700);
         border-radius: 100% 100% 0 100%;
         cursor: pointer;
     }
@@ -107,8 +111,13 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        padding: 1px;
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 100%;
+        background-color: var(--sequencer-color-white);
+        border: none;
+        box-shadow: 0px 3px 0 1px var(--sequencer-color-gray-500);
     }
 </style>

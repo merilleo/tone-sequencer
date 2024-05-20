@@ -10,6 +10,7 @@
     export let note = 'C4';
     export let isPlaying = false;
     export let randomize = 0;
+    export let randomizeBeat = 0;
     export let reset = false;
 
     // State variables
@@ -25,6 +26,12 @@
     $: {
         if (randomize !== 0) {
             randomRotation();
+        }
+    }
+    $: {
+        if (randomizeBeat !== 0) {
+            randomizeBeat = 0;
+            randomBeat();
         }
     }
 
@@ -55,11 +62,13 @@
     function randomRotation() {
         const randomNumber = Math.random() * (Math.random() * randomize);
         const randomDirection = Math.random() > 0.5;
-        active = Math.random() > 0.5;
 
         for (let i = 0; i < randomNumber; i++ ) {
             rotate(randomDirection);
         }
+    }
+    function randomBeat() {
+        active = Math.random() > 0.5;
     }
 
     function checkRotationLimit(isClockwise: boolean) {
@@ -122,6 +131,7 @@
 
 </script>
 <div class="container {isPlaying ? 'playing' : ''}">
+    <div class="shadow absolute"></div>
     <div
             role="slider"
             aria-valuemin="0"
@@ -138,63 +148,90 @@
             on:touchmove={handleDrag}
             on:touchend={handleDragEnd}
     >
-        <div class="note" style="transform: rotate({-rotation + 1.5 * STEP}deg);">
+        <div class="note absolute" style="transform: rotate({-rotation + 1.5 * STEP}deg);">
             {note}
             {#each NOTES as note, i}
                 <div class="point {i === position % NOTES.length ? 'active' : ''}" style="
-               transform: rotate({i * STEP}deg) translate(50px) rotate(-{i * STEP}deg);"></div>
+               transform:
+               rotate({i * STEP}deg)
+               translate(40px)
+               rotate(-{i * STEP}deg)
+               {i === position % NOTES.length ? `scale(1.75) rotate(${i * STEP}deg)` : 'scale(1)'};"></div>
             {/each}
         </div>
-
+        <div class="indicator absolute"></div>
 
     </div>
 </div>
 
 <style>
-    .rotator {
+    .container {
         position: relative;
-        width: 50px;
-        height: 50px;
-        border: 1px solid black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 0.1s;
-        border-radius: 100% 100% 0 100%;
-        cursor: pointer;
     }
-
-    .rotator.active {
-        background-color: #152bab;
-        color: #fff;
-    }
-
-    .playing .rotator {
-        box-shadow: rgba(0, 0, 0, 0.2) 0 0 28px 5px
-    }
-    .playing .rotator.active {
-        box-shadow: #152bab 0 0 70px 4px
-    }
-
-    .note {
+    .absolute {
         position: absolute;
         width: 100%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 100%;
+    }
+    .rotator {
+        position: relative;
+        width:  calc( var(--sequencer-knob-size) - 2px );
+        height: calc( var(--sequencer-knob-size) - 2px );
+        display: flex;
+        justify-content: center;
+        align-items: center;
         transition: transform 0.1s;
+        border-radius: 100% 100% 0 100%;
+        cursor: pointer;
+        background-color: var(--sequencer-color-gray-700);
+    }
+
+    .rotator.active {
+        /*background-color: #152bab;*/
+        color: #fff;
+    }
+
+    .shadow {
+        width:  var(--sequencer-knob-size);
+        height: var(--sequencer-knob-size);
+        box-shadow: 0px 4px 0 4px var(--sequencer-color-gray-500);
+    }
+    .note {
+        transition: transform 0.1s;
+        background-color: var(--sequencer-color-white);
+        padding: 1px;
+
+    }
+    .rotator.active .note {
+        background-color: var(--sequencer-color-primary);
+    }
+
+    .indicator {
+        border: 4px solid var(--sequencer-color-white);
+    }
+    .playing .rotator .indicator {
+        border: 3px solid var(--sequencer-color-gray-400);
+    }
+
+    .playing .rotator.active .indicator {
+        border: 3px solid var(--sequencer-color-primary);
     }
 
     .point {
         position: absolute;
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
-        background-color: #dee3ed;
-        transition: background-color 0.1s;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background-color: var(--sequencer-color-gray-300);
+        transition: transform 0.3s, background-color 0.3s;
+        transition-timing-function: cubic-bezier(0.01, 0.72, 1, 0.31);
     }
+
     .point.active {
-        background-color: #152bab;
+        background-color: var(--sequencer-color-primary);
     }
 </style>
