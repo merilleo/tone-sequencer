@@ -3,6 +3,7 @@
     import * as Tone from "tone";
     import NoteKnob from "./lib/NoteKnob.svelte";
     import RotaryKnob from "./lib/RotaryKnob.svelte";
+    import fontText from "./assets/LCD14.txt?raw";
 
     let isStartup = writable(true);
     let isPlaying = writable(false);
@@ -166,11 +167,15 @@
 </script>
 
 <main>
+
     {#if $isStartup}
-        <button on:click={()=>isStartup.set(false)}>PLAY SOME MUSIC</button>
+        <div class="load-tone-generator">
+            <button on:click={()=>isStartup.set(false)}>PLAY SOME MUSIC</button>
+        </div>
     {:else}
 
         <div class="tone-generator">
+            <div style="--font:{fontText}"></div>
             <div class="module settings">
                 <h3 class="module-title">LOOPER</h3>
                 <div class="start-section row grid-2 gap">
@@ -222,7 +227,7 @@
                             min ={0}
                             max ={360}
                             step = {1}
-                            label="Detune"
+                            walabel="Detune"
                     />-->
                     <RotaryKnob
                             bind:value ={harmonicity}
@@ -295,6 +300,11 @@
 
 
 <style>
+    .load-tone-generator {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     .start-section {
         margin-bottom: 1rem;
     }
@@ -358,7 +368,8 @@
         margin-bottom: 2rem;
     }
     .knob-gap {
-        gap: 65px;
+        row-gap: 50px;
+        column-gap: 17px;
         margin-top: 2rem;
     }
 </style>
